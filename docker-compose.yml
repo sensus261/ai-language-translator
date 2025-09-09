@@ -1,0 +1,53 @@
+services:
+  ########################################################
+  ###################### DOCKERHOST ######################
+  ########################################################
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add: ["NET_ADMIN", "NET_RAW"]
+    restart: unless-stopped
+
+  ###################################################
+  ###################### TOOLS ######################
+  ###################################################
+  ollama:
+    image: ollama/ollama:rocm
+    container_name: ollama-files-translator
+    restart: unless-stopped
+    environment:
+      OLLAMA_MODELS: /usr/share/ollama
+      HSA_OVERRIDE_GFX_VERSION: "11.0.0"
+      HIP_VISIBLE_DEVICES: "0"
+      OLLAMA_HOST: "0.0.0.0"
+    devices:
+      - "/dev/kfd"
+      - "/dev/dri"
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE
+    ipc: host
+    group_add:
+      - video
+    volumes:
+      - ./infrastructure/ollama:/root/.ollama
+      - ./infrastructure/ollama_models:/usr/share/ollama
+    ports:
+      - "${OLLAMA_SERVICE_PORT:-11434}:11434"
+
+  ######################################################
+  ###################### SERVICES ######################
+  ######################################################
+
+  ollama-api-service:
+    container_name: "ollama-api-service-files-translator"
+    build:
+      context: ./services/files-translator-service/docker
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./services/files-translator-service:/app
+    ports:
+      - "${OLLAMA_API_SERVICE_PORT:-5001}:5000"
+    restart: unless-stopped

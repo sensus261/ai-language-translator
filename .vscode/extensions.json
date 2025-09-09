@@ -1,0 +1,32 @@
+{
+  "recommendations": [
+    // General tools
+    "ms-azuretools.vscode-docker",
+    "foxundermoon.shell-format",
+    "eamodio.gitlens",
+    "phplasma.csv-to-table",
+    "ms-vscode-remote.remote-containers",
+    "DavidAnson.vscode-markdownlint",
+    // Backend services
+    "d9705996.tighten-lint",
+    "open-southeners.laravel-pint",
+    "bmewburn.vscode-intelephense-client",
+    "xdebug.php-debug",
+    "SanderRonde.phpstan-vscode",
+    "onecentlin.laravel5-snippets",
+    "aaron-bond.better-comments",
+    "ms-python.python",
+    "ms-python.pylint",
+    // Frontends
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "rvest.vs-code-prettier-eslint",
+    "christian-kohler.npm-intellisense",
+    "bradlc.vscode-tailwindcss",
+    "naumovs.color-highlight",
+    // Optionals
+    "PKief.material-icon-theme",
+    "ethansk.restore-terminals"
+  ],
+  "unwantedRecommendations": []
+}

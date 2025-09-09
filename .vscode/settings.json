@@ -1,0 +1,138 @@
+{
+  // GENERAL EDITOR
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "editor.tabSize": 4,
+  "editor.detectIndentation": true,
+
+  // AUTO FORWARD NEW RUNNING PROCESSES PORTS ON START (REMOTE DEVEOPMENT FEATURE)
+  "remote.autoForwardPorts": true,
+
+  "tighten-lint.exec": "$PWD/services/main-api-service/vendor/bin/tlint",
+
+  // ESLINT
+  "eslint.workingDirectories": ["./frontend"],
+  "eslint.validate": [
+    "html",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "laravel-pint.enable": true,
+
+  "[./frontend/**/*.tsx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // GENERAL FORMATTERS
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[php]": {
+    "editor.defaultFormatter": "open-southeners.laravel-pint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+
+  // ENV
+  "files.associations": {
+    "*.env": "env",
+    "*.env.development": "env",
+    "*.env.staging": "env",
+    "*.env.production": "env"
+  },
+
+  // RESTORE TERMINALS
+  "restoreTerminals.runOnStartup": true,
+
+  "restoreTerminals.terminals": [
+    {
+      "splitTerminals": [
+        {
+          "name": "GIT",
+          "commands": [],
+          "shouldRunCommands": false
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "PROJECT",
+          "commands": ["clear && ./infrastructure/scripts/main.sh"]
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "CUSTOM",
+          "commands": [],
+          "shouldRunCommands": false
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "GPU MONITOR",
+          "commands": ["watch -n 1 rocm-smi"],
+          "shouldRunCommands": false
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "----------------",
+          "commands": [],
+          "shouldRunCommands": false
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "[OLLAMA-API] SHELL",
+          "commands": [
+            "./infrastructure/scripts/start-ollama-api-service-container-shell.sh"
+          ],
+          "shouldRunCommands": false
+        }
+      ]
+    },
+    {
+      "splitTerminals": [
+        {
+          "name": "[OLLAMA-SERVICE] SHELL",
+          "commands": [
+            "./infrastructure/scripts/start-ollama-service-container-shell.sh"
+          ],
+          "shouldRunCommands": false
+        }
+      ]
+    }
+  ],
+  "markdown.preview.fontSize": 16
+
+  // (OPTIONAL) THEMES
+  // "workbench.iconTheme": "material-icon-theme",
+}
