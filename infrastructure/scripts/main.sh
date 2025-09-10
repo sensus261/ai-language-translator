@@ -105,6 +105,7 @@ get_script_description() {
     "start-ollama-api-service-container-shell.sh") echo "🖥️  Access Ollama API container shell" ;;
     "restart-ollama-api-service.sh") echo "🔄 Restart Ollama API service" ;;
     "stop-ollama-api-service-container.sh") echo "⏹️  Stop Ollama API service container" ;;
+    "reload-fallout-files.sh") echo "♻️  Reload original Fallout files" ;;
     "start-ollama-service-container-shell.sh") echo "🖥️  Access Ollama service container shell" ;;
     "restart-ollama-service.sh") echo "🔄 Restart Ollama service" ;;
     "stop-ollama-service-provider-container.sh") echo "⏹️  Stop Ollama service provider container" ;;
@@ -269,7 +270,7 @@ for script in $SCRIPT_DIR/*.sh; do
     initialize-project.sh | start-project.sh | restart-project.sh | stop-project.sh | clear-logs.sh | docker-containers-status.sh | update-to-last-version.sh | start-only-ai-part.sh)
         general_project_scripts+=("$script")
         ;;
-    start-ollama-api-service-container-shell.sh | restart-ollama-api-service.sh | stop-ollama-api-service-container.sh)
+    start-ollama-api-service-container-shell.sh | restart-ollama-api-service.sh | stop-ollama-api-service-container.sh | reload-fallout-files.sh)
         ollama_api_service_scripts+=("$script")
         ;;
     start-ollama-service-container-shell.sh | restart-ollama-service.sh | stop-ollama-service-provider-container.sh)

@@ -1,9 +1,0 @@
-version: 2
-updates:
-  - package-ecosystem: "composer"
-    directory: "/services/main-api-service"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "deps"
-    open-pull-requests-limit: 50
