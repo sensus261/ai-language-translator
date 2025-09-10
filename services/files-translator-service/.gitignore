@@ -1,1 +1,3 @@
 logs
+routes/__pycache__/
+*.pyc

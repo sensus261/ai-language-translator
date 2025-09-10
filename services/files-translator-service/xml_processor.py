@@ -5,6 +5,7 @@ import re
 import threading
 from xml.sax.saxutils import escape, unescape
 from services import ai_service
+from config import Config
 
 # Global state for XML batch processing
 xml_batch_processing = False
@@ -196,7 +197,7 @@ class XMLProcessor:
             self.append_string_entry(xml_entry['attributes'], source_text, source_text)
             return {"status": "skipped", "message": "Skipped empty XML entry"}
         
-        # Translate the text
+        # Translate the text using AI
         romanian_text = ai_service.translate_text(source_text)
         
         if romanian_text is None:
@@ -279,14 +280,18 @@ class XMLProcessor:
         try:
             processed_count = 0
             skipped_count = 0
+            copied_count = 0  # Count entries that were copied without translation
             errors = []
+            
+            # Get the translation limit from config
+            max_entries_to_translate = Config.XML_MAX_ENTRIES_TO_TRANSLATE
             
             print(f"[XML-PROCESSOR] Starting background batch processing...")
             
             while True:
                 # Check if stop was requested
                 if xml_batch_stop_requested:
-                    print(f"[XML-PROCESSOR] Batch processing stopped by user request after {processed_count} entries")
+                    print(f"[XML-PROCESSOR] Batch processing stopped by user request after {processed_count} processed, {skipped_count} skipped, {copied_count} copied entries.")
                     break
                 
                 xml_entry = self.find_next_string_entry()
@@ -303,7 +308,27 @@ class XMLProcessor:
                     skipped_count += 1
                     continue
                 
-                # Translate the text
+                # Check if we've reached the translation limit
+                if max_entries_to_translate > 0 and processed_count >= max_entries_to_translate:
+                    # Copy original text as Romanian translation (no AI call)
+                    if not self.append_string_entry(xml_entry['attributes'], source_text, source_text):
+                        errors.append(f"Failed to write copied text for: {source_text}")
+                        continue
+                    
+                    # Remove the processed entry from input file
+                    if not self.remove_string_entry(xml_entry['start_pos'], xml_entry['end_pos']):
+                        errors.append(f"Failed to remove copied XML entry: {source_text}")
+                        break
+                    
+                    copied_count += 1
+                    
+                    # Log progress every 100 entries for copied items too
+                    if (processed_count + copied_count) % 100 == 0:
+                        print(f"[XML-PROCESSOR] Progress: {processed_count} translated, {copied_count} copied, {skipped_count} skipped (empty strings)")
+                    
+                    continue
+                
+                # Translate the text using AI
                 romanian_text = ai_service.translate_text(source_text)
                 
                 if romanian_text is None:
@@ -314,9 +339,7 @@ class XMLProcessor:
                 # Append to output XML file
                 if not self.append_string_entry(xml_entry['attributes'], source_text, romanian_text):
                     errors.append(f"Failed to write translation for: {source_text}")
-                    continue
-                
-                # Remove the processed entry from input file
+                    continue                # Remove the processed entry from input file
                 if not self.remove_string_entry(xml_entry['start_pos'], xml_entry['end_pos']):
                     errors.append(f"Failed to remove processed XML entry: {source_text}")
                     break
@@ -325,9 +348,9 @@ class XMLProcessor:
                 
                 # Log progress every 100 entries
                 if processed_count % 100 == 0:
-                    print(f"[XML-PROCESSOR] Progress: {processed_count} XML entries processed")
+                    print(f"[XML-PROCESSOR] Progress: {processed_count} XML entries translated")
             
-            print(f"[XML-PROCESSOR] Background batch processing finished. Processed: {processed_count}, Skipped: {skipped_count}, Errors: {len(errors)}")
+            print(f"[XML-PROCESSOR] Background batch processing finished. Translated: {processed_count}, Copied: {copied_count}, Skipped: {skipped_count}, Errors: {len(errors)}")
             
         except Exception as e:
             print(f"[XML-PROCESSOR] Error in background batch processing: {str(e)}")

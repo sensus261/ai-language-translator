@@ -19,6 +19,9 @@ class Config:
     XML_INPUT_FILE_PATH = os.getenv('XML_INPUT_FILE_PATH', '/app/original_fallout_files/Fallout4_en_fr.xml')
     XML_OUTPUT_FILE_PATH = os.getenv('XML_OUTPUT_FILE_PATH', '/app/original_fallout_files/Fallout4_en_ro.xml')
     
+    # XML processing configuration
+    XML_MAX_ENTRIES_TO_TRANSLATE = int(os.getenv('XML_MAX_ENTRIES_TO_TRANSLATE', '0'))  # 0 means no limit
+    
     def print_config(self):
         """Print configuration for debugging."""
         print(" ")
@@ -30,4 +33,5 @@ class Config:
         print(f"[FILES-TRANSLATOR] Output file path: {self.OUTPUT_FILE_PATH}")
         print(f"[FILES-TRANSLATOR] XML input file path: {self.XML_INPUT_FILE_PATH}")
         print(f"[FILES-TRANSLATOR] XML output file path: {self.XML_OUTPUT_FILE_PATH}")
+        print(f"[FILES-TRANSLATOR] XML max entries to translate: {self.XML_MAX_ENTRIES_TO_TRANSLATE} (0 = no limit)")
         print(" ")
