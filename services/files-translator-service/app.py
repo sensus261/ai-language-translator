@@ -15,6 +15,11 @@ class TeeOutput:
         self.files = files
     
     def write(self, obj):
+        # Add timestamp to each line if it's not just whitespace
+        if obj.strip():
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            obj = f"[{timestamp}] {obj}"
+        
         for f in self.files:
             f.write(obj)
             f.flush()
